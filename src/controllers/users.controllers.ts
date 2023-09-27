@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import { RegisterReqBody } from '~/models/requests/User.requests'
 import User from '~/models/schemas/User.schema'
@@ -18,18 +18,16 @@ export const loginController = (req: Request, res: Response) => {
   })
 }
 
-export const registerController = async (req: Request<ParamsDictionary, any, RegisterReqBody>, res: Response) => {
-  try {
-    const result = await userServices.register(req.body)
+export const registerController = (
+  req: Request<ParamsDictionary, any, RegisterReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  throw new Error(`Hey it's error`)
+  // const result = await userServices.register(req.body)
 
-    return res.json({
-      message: 'Register Success',
-      result
-    })
-  } catch (error) {
-    console.log(error)
-    return res.status(400).json({
-      message: 'Failed'
-    })
-  }
+  // return res.json({
+  //   message: 'Register Success',
+  //   result
+  // })
 }
