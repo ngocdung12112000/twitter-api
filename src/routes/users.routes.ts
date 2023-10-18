@@ -10,17 +10,24 @@ import {
   resetPasswordController,
   getMeController,
   updateMeController,
-  getProfleController
+  getProfleController,
+  followController,
+  unFollowController,
+  changePasswordController,
+  oauthController
 } from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
 import {
   accessTokenValidator,
+  changePasswordValidator,
   emailVerifyTokenValidator,
+  followValidator,
   forgotPasswordValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidator,
+  unFollowValidator,
   updateMeValidator,
   verifiedUserValidator,
   verifyForgotPasswordTokenValidator
@@ -41,6 +48,15 @@ usersRouter.use((req, res, next) => {
  * Body: { email: string, password: string}
  */
 usersRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
+
+/**
+ * Description: Register a new user
+ * Path: /oauth/google
+ * Method: GET
+ * Body: { email: string, password: string}
+ */
+usersRouter.get('/oauth/google', wrapRequestHandler(oauthController))
+
 
 /**
  * Description: Register a new user
@@ -151,5 +167,50 @@ usersRouter.patch(
  * Body: UserSchema
  */
 usersRouter.get('/:username', wrapRequestHandler(getProfleController))
+
+/**
+ * Description: Follow user
+ * Path: /follow
+ * Method: POST
+ * Header: { Authorization: Bearer <access_token> },
+ * Body: {user_id: string}
+ */
+usersRouter.post(
+  '/follow',
+  accessTokenValidator,
+  verifiedUserValidator as any,
+  followValidator,
+  wrapRequestHandler(followController)
+)
+
+/**
+ * Description: Follow user
+ * Path: /follow/user_id
+ * Method: POST
+ * Header: { Authorization: Bearer <access_token> },
+ * Body: {user_id: string}
+ */
+usersRouter.delete(
+  '/follow/:user_id',
+  accessTokenValidator,
+  verifiedUserValidator as any,
+  unFollowValidator,
+  wrapRequestHandler(unFollowController)
+)
+
+/**
+ * Description: Follow user
+ * Path: /change-password
+ * Method: POST
+ * Header: { Authorization: Bearer <access_token> },
+ * Body: {old_password: string, password: string, confirm_new_password: string}
+ */
+usersRouter.put(
+  '/change-password',
+  accessTokenValidator,
+  verifiedUserValidator as any,
+  changePasswordValidator,
+  wrapRequestHandler(changePasswordController)
+)
 
 export default usersRouter
