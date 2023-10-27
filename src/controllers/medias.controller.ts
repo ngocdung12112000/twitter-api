@@ -44,7 +44,7 @@ export const serveVideoStreamController = (req: Request, res: Response) => {
   // Dung lượng video (bytes)
   const videoSize = fs.statSync(videoPath).size
   // Dung lượng video cho mỗi phân đoạn stream
-  const chunkSize = 10000 // 1MB
+  const chunkSize = 10 ** 6 // 1MB
   // Lấy giá trị byte bắt đầu từ header Range
   const start = Number(range.replace(/\D/g, ''))
   // Lấy giá trị byte kết thúc

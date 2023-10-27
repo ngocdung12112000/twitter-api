@@ -214,7 +214,7 @@ class UserServices {
     // If not then register new account
     else {
       // random string password
-      const randomPassword = Math.random().toString(36).substring(2,15)
+      const randomPassword = Math.random().toString(36).substring(2, 15)
       const data = await this.register({
         email: userInfo.email,
         name: userInfo.name,
@@ -231,6 +231,27 @@ class UserServices {
     await databaseService.refreshTokens.deleteOne({ token: refresh_token })
     return {
       message: USER_MESSAGES.LOGOUT_SUCCESS
+    }
+  }
+
+  async refreshToken({
+    user_id,
+    verify,
+    refresh_token
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    refresh_token: string
+  }) {
+    const [new_access_token, new_refresh_token] = await Promise.all([
+      this.signAccessToken({ user_id, verify }),
+      this.signRefeshToken({ user_id, verify }),
+      databaseService.refreshTokens.deleteOne({ token: refresh_token })
+    ])
+
+    return {
+      access_token: new_access_token,
+      refresh_token: new_refresh_token
     }
   }
 
