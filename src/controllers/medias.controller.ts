@@ -23,9 +23,35 @@ export const uploadVideosController = async (req: Request, res: Response) => {
   })
 }
 
+export const uploadVideosHLSController = async (req: Request, res: Response) => {
+  const url = await mediaService.uploadVideosHLS(req)
+  return res.json({
+    message: USER_MESSAGES.UPLOAD_SUCCESS,
+    result: url
+  })
+}
+
 export const serveImageController = (req: Request, res: Response) => {
   const { name } = req.params
   return res.sendFile(path.resolve(UPLOAD_IMAGE_DIR, name), (err) => {
+    if (err) {
+      res.status((err as any).status).send('Not found')
+    }
+  })
+}
+
+export const serveM3U8Controller = (req: Request, res: Response) => {
+  const { id } = req.params
+  return res.sendFile(path.resolve(UPLOAD_VIDEO_DIR, id, 'master.m3u8'), (err) => {
+    if (err) {
+      res.status((err as any).status).send('Not found')
+    }
+  })
+}
+
+export const serveSegmentController = (req: Request, res: Response) => {
+  const { id, v, segment } = req.params
+  return res.sendFile(path.resolve(UPLOAD_VIDEO_DIR, id, v, segment), (err) => {
     if (err) {
       res.status((err as any).status).send('Not found')
     }
@@ -40,7 +66,7 @@ export const serveVideoStreamController = (req: Request, res: Response) => {
 
   const { name } = req.params
   // Đường dẫn video
-  const videoPath = path.resolve(UPLOAD_VIDEO_DIR, name)
+  const videoPath = path.resolve(UPLOAD_VIDEO_DIR, name, name + '.mp4')
   // Dung lượng video (bytes)
   const videoSize = fs.statSync(videoPath).size
   // Dung lượng video cho mỗi phân đoạn stream

@@ -7,13 +7,14 @@ import { initFolder } from './utils/file'
 import { config } from 'dotenv'
 import staticRouter from './routes/static.routes'
 import { UPLOAD_VIDEO_DIR } from './constants/dir'
+import cors from 'cors'
 
 const app = express()
 const port = process.env.PORT || 4000
 config()
 
 initFolder()
-
+app.use(cors())
 app.use(express.json())
 app.use('/users', usersRouter)
 app.use('/medias', mediasRouter)
