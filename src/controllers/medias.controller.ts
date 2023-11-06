@@ -40,6 +40,15 @@ export const serveImageController = (req: Request, res: Response) => {
   })
 }
 
+export const videoStatusController = async (req: Request, res: Response) => {
+  const { id } = req.params
+  const data = await mediaService.getVideoStatus(id as string)
+  return res.json({
+    message: USER_MESSAGES.GET_VIDEO_STATUS_SUCCESS,
+    result: data
+  })
+}
+
 export const serveM3U8Controller = (req: Request, res: Response) => {
   const { id } = req.params
   return res.sendFile(path.resolve(UPLOAD_VIDEO_DIR, id, 'master.m3u8'), (err) => {
