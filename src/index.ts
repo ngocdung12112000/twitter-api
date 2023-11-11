@@ -9,6 +9,7 @@ import staticRouter from './routes/static.routes'
 import { UPLOAD_VIDEO_DIR } from './constants/dir'
 import cors from 'cors'
 import tweetRouter from './routes/tweet.routes'
+import bookmarkRouter from './routes/bookmarks.routes'
 
 const app = express()
 const port = process.env.PORT || 4000
@@ -22,6 +23,7 @@ app.use('/medias', mediasRouter)
 app.use('/static', staticRouter)
 app.use('/static/videos', express.static(UPLOAD_VIDEO_DIR))
 app.use('/tweet', tweetRouter)
+app.use('/bookmarks', bookmarkRouter)
 app.use(defaultErrorHandler)
 databaseService.connect().then(() => {
   databaseService.indexUsers()
