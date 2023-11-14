@@ -10,10 +10,12 @@ import { UPLOAD_VIDEO_DIR } from './constants/dir'
 import cors from 'cors'
 import tweetRouter from './routes/tweet.routes'
 import bookmarkRouter from './routes/bookmarks.routes'
+import { createDataFake } from './utils/common'
 
 const app = express()
 const port = process.env.PORT || 4000
 config()
+//createDataFake()
 
 initFolder()
 app.use(cors())
