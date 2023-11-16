@@ -11,6 +11,7 @@ import cors from 'cors'
 import tweetRouter from './routes/tweet.routes'
 import bookmarkRouter from './routes/bookmarks.routes'
 import { createDataFake } from './utils/common'
+import searchRouter from './routes/search.routes'
 
 const app = express()
 const port = process.env.PORT || 4000
@@ -23,6 +24,7 @@ app.use(express.json())
 app.use('/users', usersRouter)
 app.use('/medias', mediasRouter)
 app.use('/static', staticRouter)
+app.use('/search', searchRouter)
 app.use('/static/videos', express.static(UPLOAD_VIDEO_DIR))
 app.use('/tweet', tweetRouter)
 app.use('/bookmarks', bookmarkRouter)
@@ -32,6 +34,7 @@ databaseService.connect().then(() => {
   databaseService.indexRefreshTokens()
   databaseService.indexVideoStatus()
   databaseService.indexFollowers()
+  databaseService.indexTweets()
 })
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
