@@ -14,7 +14,8 @@ export const searchController = async (req: Request<ParamsDictionary, any, any, 
     page,
     content: req.query.content,
     user_id: req.decoded_authorization?.user_id as string,
-    media_type: req.query.media_type
+    media_type: req.query.media_type,
+    people_follow: req.query.people_follow
   })
 
   return res.json({

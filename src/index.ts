@@ -12,6 +12,7 @@ import tweetRouter from './routes/tweet.routes'
 import bookmarkRouter from './routes/bookmarks.routes'
 import { createDataFake } from './utils/common'
 import searchRouter from './routes/search.routes'
+import './utils/s3'
 
 const app = express()
 const port = process.env.PORT || 4000
