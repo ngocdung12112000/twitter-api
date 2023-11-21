@@ -2,6 +2,8 @@ import { S3 } from '@aws-sdk/client-s3'
 import { config } from 'dotenv'
 import { Upload } from '@aws-sdk/lib-storage'
 import fs from 'fs'
+import { Response } from 'express'
+import HTTP_STATUS from '~/constants/httpStatus'
 config()
 const s3 = new S3({
   region: process.env.AWS_REGION,
@@ -23,7 +25,7 @@ export const uploadFleToS3 = ({
   const parallelUploads3 = new Upload({
     client: s3,
     params: {
-      Bucket: 'twitter-clone-bucket-ap-southeast-1',
+      Bucket: process.env.S3_BUCKET_NAME as string,
       Key: fileName,
       Body: fs.readFileSync(filePath),
       ContentType: contentType
@@ -36,4 +38,16 @@ export const uploadFleToS3 = ({
     leavePartsOnError: false // optional manually handle dropped parts
   })
   return parallelUploads3.done()
+}
+
+export const sendFileFromS3 = async (res: Response, filepath: string) => {
+  try {
+    const data = await s3.getObject({
+      Bucket: process.env.S3_BUCKET_NAME as string,
+      Key: filepath
+    })
+    ;(data.Body as any).pipe(res)
+  } catch (error) {
+    res.status(HTTP_STATUS.NOT_FOUND).send('Not found')
+  }
 }
