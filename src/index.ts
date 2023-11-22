@@ -13,8 +13,11 @@ import bookmarkRouter from './routes/bookmarks.routes'
 import { createDataFake } from './utils/common'
 import searchRouter from './routes/search.routes'
 import './utils/s3'
+import { createServer } from 'http'
+import { Server, Socket } from 'socket.io'
 
 const app = express()
+const httpServer = createServer()
 const port = process.env.PORT || 4000
 config()
 //createDataFake()
@@ -37,6 +40,21 @@ databaseService.connect().then(() => {
   databaseService.indexFollowers()
   databaseService.indexTweets()
 })
-app.listen(port, () => {
+// app.listen(port, () => {
+//   console.log(`App listening on port ${port}`)
+// })
+const io = new Server(httpServer, {
+  cors: {
+    origin: process.env.CLIENT_URL
+  }
+})
+
+io.on('connection', (socket: Socket) => {
+  console.log(`user ${socket.id} connected`)
+  socket.on('disconnect', () => {
+    console.log(`user ${socket.id} disconnected`)
+  })
+})
+httpServer.listen(port, () => {
   console.log(`App listening on port ${port}`)
 })
