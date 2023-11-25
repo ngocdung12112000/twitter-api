@@ -1,10 +1,11 @@
 import { config } from 'dotenv'
 import { Request, Response } from 'express'
+import { GetConversationParam } from '~/models/requests/Conversation.requests'
 import conversationService from '~/services/conversations.services'
 
 config()
 
-export const getConversationsController = async (req: Request, res: Response) => {
+export const getConversationsController = async (req: Request<GetConversationParam>, res: Response) => {
   const { receiver_id } = req.params
   const page = Number(req.query.page)
   const limit = Number(req.query.limit)

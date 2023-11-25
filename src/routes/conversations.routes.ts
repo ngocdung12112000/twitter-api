@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { getConversationsController } from '~/controllers/conversations.controller'
-import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.midderwares'
+import { paginationValidator } from '~/middlewares/tweet.middlewares'
+import { accessTokenValidator, getConversationsValidator, verifiedUserValidator } from '~/middlewares/users.midderwares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const conversationRouter = Router()
@@ -12,8 +13,10 @@ const conversationRouter = Router()
 conversationRouter.get(
   '/receivers/:receiver_id',
   accessTokenValidator,
-  verifiedUserValidator as any,
-  getConversationsController
+  verifiedUserValidator,
+  paginationValidator,
+  getConversationsValidator,
+  wrapRequestHandler(getConversationsController)
 )
 
 export default conversationRouter
