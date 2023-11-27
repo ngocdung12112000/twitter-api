@@ -43,10 +43,121 @@ usersRouter.use((req, res, next) => {
 })
 
 /**
- * Description: Register a new user
- * Path: /login
- * Method: POST
- * Body: { email: string, password: string}
+ * @swagger
+ * components:
+ *   schemas:
+ *     LoginBody:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *           example: dung20@gmail.com
+ *         password:
+ *           type: string
+ *           example: 12345678@Abc
+ *     SuccessAuthentication:
+ *       type: object
+ *       properties:
+ *         access_token:
+ *           type: string
+ *           example: JWT token
+ *         refresh_token:
+ *           type: string
+ *           example: JWT token
+ *     User:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           format: MongoId
+ *           example: '654f95e0bd83f0bc306bb2b4'
+ *         name:
+ *           type: string
+ *           example: 'Ngọc Dũng 2005'
+ *         email:
+ *           type: string
+ *           format: email
+ *           example: 'dung2005@gmail.com'
+ *         date_of_birth:
+ *           type: string
+ *           format: ISO8601
+ *           example: '2003-09-21T15:18:47.987Z'
+ *         created_at:
+ *           type: string
+ *           format: ISO8601
+ *           example: '2023-11-11T14:55:28.100Z'
+ *         updated_at:
+ *           type: string
+ *           format: ISO8601
+ *           example: '2023-11-11T14:56:42.724Z'
+ *         verify:
+ *           $ref: '#/components/schemas/UserVerifyStatus'
+ *         twitter_circle:
+ *           type: array
+ *           items:
+ *             type: string
+ *             format: MongoId
+ *             example: ['654f95e0bd83f0bc306bb2b4']
+ *         bio:
+ *           type: string
+ *           example: ''
+ *         location:
+ *           type: string
+ *           example: ''
+ *         website:
+ *           type: string
+ *           format: uri
+ *           example: ''
+ *         username:
+ *           type: string
+ *           example: 'Ngọc Dũng'
+ *         avatar:
+ *           type: string
+ *           example: ''
+ *         cover_photo:
+ *           type: string
+ *           example: ''
+ *     UserVerifyStatus:
+ *       type: number
+ *       enum: [0, 1, 2]
+ *       example: 1
+ *   securitySchemes:
+ *     BearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
+/**
+ * @openapi
+ * /users/login:
+ *   post:
+ *     tags: [Users]
+ *     summary: Login
+ *     description: Login to system
+ *     operationId: login
+ *     requestBody:
+ *       description: Login information
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginBody'
+ *     responses:
+ *       '200':
+ *         description: Login Successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Login successful
+ *                 result:
+ *                   $ref: '#/components/schemas/SuccessAuthentication'
+ *       '422':
+ *         description: Invalid input
  */
 usersRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
 
