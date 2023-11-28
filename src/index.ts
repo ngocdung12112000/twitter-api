@@ -16,14 +16,14 @@ import './utils/s3'
 import { createServer } from 'http'
 import conversationRouter from './routes/conversations.routes'
 import initSocket from './utils/socket'
-import YAML from 'yaml'
-import fs from 'fs'
-import path from 'path'
+// import YAML from 'yaml'
+// import fs from 'fs'
+// import path from 'path'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsdoc from 'swagger-jsdoc'
 
-const file = fs.readFileSync(path.resolve('twitter-swagger.yaml'), 'utf8')
-const swaggerDocument = YAML.parse(file)
+// const file = fs.readFileSync(path.resolve('twitter-swagger.yaml'), 'utf8')
+// const swaggerDocument = YAML.parse(file)
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -32,8 +32,17 @@ const options: swaggerJsdoc.Options = {
       title: 'X clone (Twitter API)',
       version: '1.0.0'
     }
+    // components: {
+    //   securitySchemes: {
+    //     BearerAuth: {
+    //       type: 'http',
+    //       scheme: 'bearer',
+    //       bearerFormat: 'JWT'
+    //     }
+    //   }
+    // }
   },
-  apis: ['./src/routes/*.routes.ts'] // files containing annotations as above
+  apis: ['./swagger/*.yaml'] // files containing annotations as above
 }
 
 const openapiSpecification = swaggerJsdoc(options)

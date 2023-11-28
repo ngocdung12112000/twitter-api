@@ -2,6 +2,87 @@ import { JwtPayload } from 'jsonwebtoken'
 import { TokenType, UserVerifyStatus } from '~/constants/enums'
 import { ParamsDictionary } from 'express-serve-static-core'
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     LoginBody:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *           example: dung20@gmail.com
+ *         password:
+ *           type: string
+ *           example: 12345678@Abc
+ *     SuccessAuthentication:
+ *       type: object
+ *       properties:
+ *         access_token:
+ *           type: string
+ *           example: JWT token
+ *         refresh_token:
+ *           type: string
+ *           example: JWT token
+ *     User:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           format: MongoId
+ *           example: '654f95e0bd83f0bc306bb2b4'
+ *         name:
+ *           type: string
+ *           example: 'Ngọc Dũng 2005'
+ *         email:
+ *           type: string
+ *           format: email
+ *           example: 'dung2005@gmail.com'
+ *         date_of_birth:
+ *           type: string
+ *           format: ISO8601
+ *           example: '2003-09-21T15:18:47.987Z'
+ *         created_at:
+ *           type: string
+ *           format: ISO8601
+ *           example: '2023-11-11T14:55:28.100Z'
+ *         updated_at:
+ *           type: string
+ *           format: ISO8601
+ *           example: '2023-11-11T14:56:42.724Z'
+ *         verify:
+ *           $ref: '#/components/schemas/UserVerifyStatus'
+ *         twitter_circle:
+ *           type: array
+ *           items:
+ *             type: string
+ *             format: MongoId
+ *             example: ['654f95e0bd83f0bc306bb2b4']
+ *         bio:
+ *           type: string
+ *           example: ''
+ *         location:
+ *           type: string
+ *           example: ''
+ *         website:
+ *           type: string
+ *           format: uri
+ *           example: ''
+ *         username:
+ *           type: string
+ *           example: 'Ngọc Dũng'
+ *         avatar:
+ *           type: string
+ *           example: ''
+ *         cover_photo:
+ *           type: string
+ *           example: ''
+ *     UserVerifyStatus:
+ *       type: number
+ *       enum: [0, 1, 2]
+ *       example: 1
+ */
+
 export interface LoginReqBody {
   email: string
   password: string
