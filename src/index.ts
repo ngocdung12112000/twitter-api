@@ -21,6 +21,7 @@ import initSocket from './utils/socket'
 // import path from 'path'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsdoc from 'swagger-jsdoc'
+import { envConfig } from './constants/config'
 
 // const file = fs.readFileSync(path.resolve('twitter-swagger.yaml'), 'utf8')
 // const swaggerDocument = YAML.parse(file)
@@ -32,15 +33,6 @@ const options: swaggerJsdoc.Options = {
       title: 'X clone (Twitter API)',
       version: '1.0.0'
     }
-    // components: {
-    //   securitySchemes: {
-    //     BearerAuth: {
-    //       type: 'http',
-    //       scheme: 'bearer',
-    //       bearerFormat: 'JWT'
-    //     }
-    //   }
-    // }
   },
   apis: ['./swagger/*.yaml'] // files containing annotations as above
 }
@@ -49,7 +41,7 @@ const openapiSpecification = swaggerJsdoc(options)
 
 const app = express()
 const httpServer = createServer(app)
-const port = process.env.PORT || 4000
+const port = envConfig.port
 config()
 //createDataFake()
 

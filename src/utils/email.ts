@@ -4,6 +4,7 @@ const { SendEmailCommand, SESClient } = require('@aws-sdk/client-ses')
 const { config } = require('dotenv')
 import fs from 'fs'
 import path from 'path'
+import { envConfig } from '~/constants/config'
 
 config()
 
@@ -11,10 +12,10 @@ const verifyEmailTemplate = fs.readFileSync(path.resolve('src/templates/verify-e
 
 // Create SES service object.
 const sesClient = new SESClient({
-  region: process.env.AWS_REGION,
+  region: envConfig.awsRegion,
   credentials: {
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID as string
+    secretAccessKey: envConfig.awsSecretAccessKey,
+    accessKeyId: envConfig.awsAccessKeyId
   }
 })
 
@@ -60,7 +61,7 @@ const createSendEmailCommand = ({
 
 export const sendVerifyEmail = (toAddress: string, subject: string, body: string) => {
   const sendEmailCommand = createSendEmailCommand({
-    fromAddress: process.env.SES_FROM_ADDRESS as string,
+    fromAddress: envConfig.sesFromAddress,
     toAddresses: toAddress,
     body,
     subject
@@ -78,7 +79,7 @@ export const sendVerifyEmailTemplate = (
     .replace('{{title}}', 'Please verify your email')
     .replace('{{content}}', 'Click button below to verify your email')
     .replace('{{textLink}}', 'Verify')
-    .replace('{{link}}', `${process.env.CLIENT_URL}/verify-email?token=${email_verify_token}`)
+    .replace('{{link}}', `${envConfig.clientUrl}/verify-email?token=${email_verify_token}`)
   return sendVerifyEmail(toAddress, 'Verify your email', template)
 }
 
@@ -91,6 +92,6 @@ export const sendForgotPasswordTemplate = (
     .replace('{{title}}', 'This email for your reset password request')
     .replace('{{content}}', 'Click button below to reset your password')
     .replace('{{textLink}}', 'Reset Password')
-    .replace('{{link}}', `${process.env.CLIENT_URL}/forgot-password?token=${forgot_password_token}`)
+    .replace('{{link}}', `${envConfig.clientUrl}/forgot-password?token=${forgot_password_token}`)
   return sendVerifyEmail(toAddress, 'Forgot password', template)
 }
