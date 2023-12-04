@@ -1,6 +1,7 @@
 import argv from 'minimist'
 import { config } from 'dotenv'
 const options = argv(process.argv.slice(2))
+const env = process.env.NODE_ENV
 config()
 export const isProduction = Boolean(options.production)
 
