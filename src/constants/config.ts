@@ -1,9 +1,25 @@
-import argv from 'minimist'
 import { config } from 'dotenv'
-const options = argv(process.argv.slice(2))
+import fs from 'fs'
+import path from 'path'
 const env = process.env.NODE_ENV
-config()
-export const isProduction = Boolean(options.production)
+const envFileName = env !== 'development' ? `.env.${env}` : '.env'
+if (!env) {
+  console.log('There is not env file! (development, production,...)')
+  process.exit(1)
+}
+console.log('NODE_ENV =', env, '->', envFileName)
+
+const pathFile = path.resolve(envFileName)
+console.log(pathFile)
+if (!fs.existsSync(pathFile)) {
+  console.log('Not found ', envFileName)
+  process.exit(1)
+}
+
+config({
+  path: envFileName
+})
+export const isProduction = Boolean(env === 'production')
 
 export const envConfig = {
   port: (process.env.PORT as string) || 4000,
@@ -19,7 +35,7 @@ export const envConfig = {
   dbHashtagCollection: process.env.DB_HASHTAG_COLLECTION as string,
   dbBookmarkCollection: process.env.DB_BOOKMARK_COLLECTION as string,
   dbConversationCollection: process.env.DB_CONVERSATION_COLLECTION as string,
-  passwordSecret: process.env.PASSWORD_SECRE as string,
+  passwordSecret: process.env.PASSWORD_SECRET as string,
   jwtSecretAccessToken: process.env.JWT_SECRET_ACCESS_TOKEN as string,
   jwtSecretRefreshToken: process.env.JWT_SECRET_REFRESH_TOKEN as string,
   jwtSecretEmailVerifyToken: process.env.JWT_SECRET_EMAIL_VERIFY_TOKEN as string,
