@@ -1,0 +1,8 @@
+version: '3'
+services:
+  twitter:
+    image: bndung/twitter:v1_prod
+    ports:
+      - '4000:4000'
+    volumes:
+      - 'D:\WEB\NODEJS\Twitter-api\twitter-api\uploads:/app/uploads'
